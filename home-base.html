@@ -3,7 +3,7 @@
 
 <head>
   {% block head %}
-  <title>{% block title%}{% endblock%} - Anthony Fecondo</title>
+  <title>{% block title%}{% endblock%} - My Resume</title>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -25,7 +25,7 @@
     <div class="container">
       <a class="navbar-brand" href="/">
          <img src="{{ url_for('static', filename='img/songbase-logo.png') }}"
-          alt="Anthony Fecondo" width="150">
+          alt="My Resume" width="150">
        </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
          <span class="navbar-toggler-icon"></span>
@@ -38,8 +38,11 @@
              </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/songs">Classes</a>
-
+            <a class="nav-link" href="/artists">Professors</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/songs">Courses</a>
+          </li>
           <li class="nav-item">
             <a class="nav-link" href="/about">About</a>
           </li>
