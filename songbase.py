@@ -1,5 +1,5 @@
 import os
-from flask import Flask, session, render_template, request, flash, redirect, url_for
+from flask import Flask, session, render_template, request, flash, redirect, url_for, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -17,7 +17,7 @@ class Artist(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64))
     about = db.Column(db.Text)
-    songs = db.relationship('Song', backref='artist')
+    songs = db.relationship('Song', backref='artist', cascade="delete")
 
 
 class Song(db.Model):
@@ -72,6 +72,27 @@ def edit_artist(id):
         return redirect(url_for('show_all_artists'))
 
 
+@app.route('/artist/delete/<int:id>', methods=['GET', 'POST'])
+def delete_artist(id):
+    artist = Artist.query.filter_by(id=id).first()
+    if request.method == 'GET':
+        return render_template('artist-delete.html', artist=artist)
+    if request.method == 'POST':
+        # delete the artist by id
+        # all related songs are deleted as well
+        db.session.delete(artist)
+        db.session.commit()
+        return redirect(url_for('show_all_artists'))
+
+
+@app.route('/api/artist/<int:id>', methods=['DELETE'])
+def delete_ajax_artist(id):
+    artist = Artist.query.get_or_404(id)
+    db.session.delete(artist)
+    db.session.commit()
+    return jsonify({"id": str(artist.id), "name": artist.name})
+
+
 # song-all.html adds song id to the edit button using a hidden input
 @app.route('/songs')
 def show_all_songs():
@@ -116,6 +137,28 @@ def edit_song(id):
         # update the database
         db.session.commit()
         return redirect(url_for('show_all_songs'))
+
+
+@app.route('/song/delete/<int:id>', methods=['GET', 'POST'])
+def delete_song(id):
+    song = Song.query.filter_by(id=id).first()
+    artists = Artist.query.all()
+    if request.method == 'GET':
+        return render_template('song-delete.html', song=song, artists=artists)
+    if request.method == 'POST':
+        # use the id to delete the song
+        # song.query.filter_by(id=id).delete()
+        db.session.delete(song)
+        db.session.commit()
+        return redirect(url_for('show_all_songs'))
+
+
+@app.route('/api/song/<int:id>', methods=['DELETE'])
+def delete_ajax_song(id):
+    song = Song.query.get_or_404(id)
+    db.session.delete(song)
+    db.session.commit()
+    return jsonify({"id": str(song.id), "name": song.name})
 
 
 @app.route('/about')

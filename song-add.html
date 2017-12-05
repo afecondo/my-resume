@@ -1,19 +1,26 @@
 {% extends "home-base.html"%}
-{% block title %}Add Course{% endblock %}
+{% block title %}Add Courses{% endblock %}
 {% block page_content%}
 
   <!-- Page Content -->
   <div class="container">
-    <h1 class="mt-5"><i class="fa fa-icon" aria-hidden="true"></i> Add Songs:</h1>
+    <h1 class="mt-5"><i class="fa fa-icon" aria-hidden="true"></i> Add Courses:</h1>
     <form action="/song/add" method="post">
       <div class="form-group">
         <label>Name</label>
         <input class="form-control" type="text" name="name" placeholder="Name of the Course" required="true">
       </div>
       <div class="form-group">
-        <label>Course Title</label>
-        <input class="form-control" type="text" name="year">
-
+        <label>Year</label>
+        <select class="form-control" name="year">
+          {% for i in range(1950, 2025) %}
+            {% if i == 2017 %}
+              <option selected="selected">{{i}}</option>
+            {% else %}
+              <option>{{i}}</option>
+            {% endif %}
+          {% endfor %}
+        </select>
       </div>
       <div class="form-group">
         <label>Professor</label>
@@ -24,12 +31,12 @@
         </select>
       </div>
       <div class="form-group">
-        Artist not in the list? <a href="/artist/add" class="btn btn-success" role="button" aria-disabled="true">Add Artists</a>
+        Professor not in the list? <a href="/artist/add" class="btn btn-success" role="button" aria-disabled="true">Add Professor</a>
       </div>
 
       <div class="form-group">
         <label>Description</label>
-        <textarea class="form-control" name="lyrics" placeholder="Description" required="true"></textarea>
+        <textarea class="form-control" name="lyrics" placeholder="Course Description" required="true"></textarea>
       </div>
       <button type="submit" class="btn btn-primary">Add Course</button>
     </form>
